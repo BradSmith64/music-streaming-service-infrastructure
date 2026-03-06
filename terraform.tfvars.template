@@ -1,0 +1,20 @@
+# Azure Service Principal Authentication
+azure_subscription_id = "00000000-0000-0000-0000-000000000000"
+azure_client_id       = "00000000-0000-0000-0000-000000000000"
+azure_client_secret   = "REPLACE_WITH_SERVICE_PRINCIPAL_SECRET"
+azure_tenant_id       = "00000000-0000-0000-0000-000000000000"
+
+# Resource Configuration
+resource_group_name = "rg-music-streaming-poc"
+location            = "West Europe"
+
+# SQL Server Configuration
+sql_admin_username = "sqladmin"
+sql_admin_password = "REPLACE_WITH_SECURE_PASSWORD" # Must follow Azure password requirements
+
+# Optional: Tags
+tags = {
+  Environment = "POC"
+  Project     = "MusicStreaming"
+  Owner       = "Brad"
+}
