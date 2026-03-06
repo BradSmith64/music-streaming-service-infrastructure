@@ -4,7 +4,7 @@ This document outlines the strategy for provisioning a new Azure environment usi
 
 ## 1. Infrastructure Architecture
 
-The new infrastructure is defined in the `/infrastructure` directory using Terraform. It includes:
+The new infrastructure is defined in the `/music_streaming_cloud_architecture` directory using Terraform. It includes:
 
 - **Resource Group**: A dedicated container for all project resources.
 - **Azure SQL Database**: Hosted on an Azure SQL Server, using the **Serverless General Purpose** tier (aligns with the Azure Free Offer).
@@ -21,7 +21,7 @@ The new infrastructure is defined in the `/infrastructure` directory using Terra
 - .NET 10 SDK and Node.js installed.
 
 ### Steps
-1. Navigate to the infrastructure directory: `cd infrastructure`
+1. Navigate to the infrastructure directory: `cd music_streaming_cloud_architecture`
 2. Create your secrets file: `cp terraform.tfvars.template terraform.tfvars`
 3. Edit `terraform.tfvars` and set a secure `sql_admin_password`.
 4. Initialize and apply:

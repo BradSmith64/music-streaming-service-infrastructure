@@ -7,7 +7,7 @@ This document maps the local development components of the Music Streaming Servi
 | Local Component | Description | Azure Service | Tier |
 | :--- | :--- | :--- | :--- |
 | **Frontend** | Next.js (React 19) | **Azure App Service** (Linux) | **Free (F1)** |
-| **Backend API** | .NET 10 Minimal API | **Azure App Service** (Linux) | **Free (F1)** |
+| **Backend API** | .NET 8 (LTS) | **Azure App Service** (Linux) | **Free (F1)** |
 | **Database** | SQL Server (Azure SQL Edge) | **Azure SQL Database** | **Free offer** |
 | **Blob Storage** | Azure Blob Storage | **Azure Storage Account** | **Standard LRS** |
 | **Secrets/Config** | `.env` / `appsettings.json` | **App Service Configuration** | **Standard** |
@@ -23,10 +23,10 @@ This document maps the local development components of the Music Streaming Servi
 - **Reasoning:** Supports full Next.js features, including Server-Side Rendering (SSR) and dynamic routing.
 - **Configuration:** `NEXT_PUBLIC_ENV_URL` maps to the backend API endpoint.
 
-### 2. Backend: .NET 10 Minimal API
+### 2. Backend: .NET 8 (LTS) Minimal API
 - **Directory:** `music_streaming_service/music-streaming-minimal-api/`
 - **Azure Choice:** **Azure App Service (Linux)**
-- **Reasoning:** Managed hosting for .NET workloads with native support for SQL Server and App Service Configuration.
+- **Reasoning:** Retargeted to **.NET 8.0** to ensure full compatibility with the Azure App Service Linux **Free (F1) tier** and stable Swashbuckle (Swagger) support.
 - **Configuration:** Environment-specific settings managed via App Service Configuration.
 
 ### 3. Database: SQL Server
@@ -50,8 +50,16 @@ This document maps the local development components of the Music Streaming Servi
 - **Automation:** GitHub Actions pipelines (planned) for automated build and deployment of both the .NET backend and Next.js frontend to Azure App Services.
 - **Infrastructure as Code (IaC):** Terraform scripts to automatically provision and manage all Azure resources, including App Services, SQL Database, and Storage Accounts. (Azure Key Vault planned for future secret management).
 - **Terraform Execution Policy:** Before executing any Terraform commands that modify infrastructure (e.g., `terraform apply`), Gemini CLI MUST show the `terraform plan` output and explicitly request user approval.
-  - **Plan Archival:** Every plan must be saved in three distinct formats (all using the `.tfplan` extension):
-    - `tfplan_ddMMyyyy_HHmmss.binary.tfplan`: Binary format for execution via `terraform apply`.
-    - `tfplan_ddMMyyyy_HHmmss.tfplan`: Plain text with ANSI color codes (best viewed in VS Code via the 'ANSI Text: Open Preview' command).
-    - `tfplan_ddMMyyyy_HHmmss_READABLE.tfplan`: Clean plain text (no colors) for maximum compatibility with any text editor.
+  - **Plan Archival:** Every plan must be saved in three distinct formats (all using the `.tfplan` extension).
   - No infrastructure changes should be applied without this confirmation.
+
+### 6. Azure Deployment Configuration (Linux App Service)
+
+The Azure App Service is configured via Terraform to support reliable zip deployments of pre-compiled .NET binaries. 
+
+**Key Settings:**
+- **`SCM_DO_BUILD_DURING_DEPLOYMENT = false`**: Prevents the server from attempting to rebuild the uploaded zip.
+- **`ENABLE_ORYX_BUILD = false`**: Ensures the server uses the binaries provided in the deployment package.
+
+For the step-by-step **"Clean and Deploy"** procedure, please refer to the application-level guide:
+**`music-streaming-minimal-api/DEPLOYMENT_GUIDE.md`**

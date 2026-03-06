@@ -40,4 +40,4 @@ If you are using Visual Studio Code, these extensions make working with Terrafor
 ---
 
 ### Ready for Next Session?
-Once these are installed and you've run `az login`, you are ready to navigate to the `/infrastructure` directory and begin the deployment!
+Once these are installed and you've run `az login`, you are ready to navigate to the `/music_streaming_cloud_architecture` directory and begin the deployment!
