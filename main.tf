@@ -67,7 +67,7 @@ resource "azurerm_linux_web_app" "backend" {
 
   site_config {
     application_stack {
-      dotnet_version = "8.0" # Temporary downgrade to 8.0 as 10.0 is not yet supported in this provider version
+      dotnet_version = "8.0" 
     }
     always_on = false # F1 does not support always_on
   }
@@ -78,6 +78,8 @@ resource "azurerm_linux_web_app" "backend" {
     "SongStorage__AccountKey"              = azurerm_storage_account.st.primary_access_key
     "SongStorage__ContainerName"           = azurerm_storage_container.music.name
     "SongStorage__ExpiryMinutes"           = "60"
+    "SCM_DO_BUILD_DURING_DEPLOYMENT"       = "false"
+    "ENABLE_ORYX_BUILD"                    = "false"
   }
 
   tags = var.tags
