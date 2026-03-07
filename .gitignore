@@ -22,3 +22,8 @@ override.tf.json
 
 # Exclude tfplan files as they are binary output of 'terraform plan' and shouldn't be version controlled.
 *.tfplan
+
+# Terraform Plan outputs
+*.ansi
+*.tfplan
+*.binary.tfplan

@@ -43,7 +43,8 @@ resource "azurerm_mssql_database" "db" {
   collation      = "SQL_Latin1_General_CP1_CI_AS"
   sku_name       = "GP_S_Gen5_1" # General Purpose Serverless
   min_capacity   = 0.5
-  auto_pause_delay_in_minutes = 60 # Pause after 1 hour of inactivity
+  max_size_gb    = 32 # General Purpose starts at 32GB
+  auto_pause_delay_in_minutes = 30 # Minimum pause delay
   tags           = var.tags
 }
 
