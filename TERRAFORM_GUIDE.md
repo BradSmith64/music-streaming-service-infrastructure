@@ -19,13 +19,13 @@ This directory contains the Infrastructure-as-Code (IaC) files required to provi
   - **Random ID:** Generates a unique suffix for resource names to avoid global naming conflicts (e.g., storage account names).
   - **Storage Account & Container:** Provisions Azure Blob Storage for music files.
   - **SQL Server & Database:** Sets up the backend database for song metadata and likes.
-  - **App Service Plan:** Defines the compute resources (Linux F1 - Free) shared by both the backend and frontend.
-  - **Backend Web App:** A Linux App Service configured for **.NET 10**.
-  - **Frontend Web App:** A Linux App Service configured for **Node.js (Next.js)**.
+  - **App Service Plan:** Defines the compute resources (Linux F1 - Free) for the backend API.
+  - **Backend Web App:** A Linux App Service configured for **.NET 8**.
+  - **Frontend Static Web App:** An **Azure Static Web App (SWA)** for the Next.js frontend.
 
 ### 4. `outputs.tf`
 **Purpose:** Defines the information that Terraform should display once the infrastructure is successfully provisioned.
-- **Content:** Outputs the backend and frontend URLs, the SQL server hostname, and the storage account name. This information is critical for the application deployment phase.
+- **Content:** Outputs the backend and frontend URLs, the SQL server hostname, the storage account name, and the **Static Web App deployment token**. This information is critical for the application deployment phase.
 
 ### 5. `terraform.tfvars.template`
 **Purpose:** A template for providing actual values for the variables defined in `variables.tf`.
@@ -42,7 +42,7 @@ Here is how these files work together to build your environment:
     *   It generates a **Random ID** to ensure globally unique names for storage and web apps.
     *   It provisions the **SQL Server**, **Database**, and **Storage Account**.
     *   It "wires" the **Backend App** by automatically injecting the SQL connection string and Storage keys into its App Settings.
-    *   It "bridges" the **Frontend App** by injecting the Backend's URL into its environment variables.
+    *   It configures the **Frontend Static Web App** by injecting the Backend's URL into its `app_settings` for server-side use.
 4.  **The Feedback (`outputs.tf`):** After provisioning, Terraform pulls the live URLs and connection strings from the created resources and prints them to your terminal for use in your deployment steps.
 5.  **The Memory (`terraform.tfstate`):** Automatically created after a successful run, this file maps your code to the real-world Azure resource IDs.
 

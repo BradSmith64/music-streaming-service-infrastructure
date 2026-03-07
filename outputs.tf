@@ -3,7 +3,12 @@ output "backend_url" {
 }
 
 output "frontend_url" {
-  value = "https://${azurerm_linux_web_app.frontend.default_hostname}"
+  value = "https://${azurerm_static_web_app.frontend.default_host_name}"
+}
+
+output "static_web_app_api_token" {
+  value     = azurerm_static_web_app.frontend.api_key
+  sensitive = true
 }
 
 output "backend_connection_string" {

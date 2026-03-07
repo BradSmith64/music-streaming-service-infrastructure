@@ -6,7 +6,7 @@ This document maps the local development components of the Music Streaming Servi
 
 | Local Component | Description | Azure Service | Tier |
 | :--- | :--- | :--- | :--- |
-| **Frontend** | Next.js (React 19) | **Azure App Service** (Linux) | **Free (F1)** |
+| **Frontend** | Next.js (React 19) | **Azure Static Web App** | **Free** |
 | **Backend API** | .NET 8 (LTS) | **Azure App Service** (Linux) | **Free (F1)** |
 | **Database** | SQL Server (Azure SQL Edge) | **Azure SQL Database** | **Free offer** |
 | **Blob Storage** | Azure Blob Storage | **Azure Storage Account** | **Standard LRS** |
@@ -18,10 +18,10 @@ This document maps the local development components of the Music Streaming Servi
 
 ### 1. Frontend: Next.js Application
 - **Directory:** `music_streaming_service_frontend/`
-- **Azure Choice:** **Azure App Service (Linux)**
-- **Status:** Pending creation and deployment.
-- **Reasoning:** Supports full Next.js features, including Server-Side Rendering (SSR) and dynamic routing.
-- **Configuration:** `NEXT_PUBLIC_ENV_URL` maps to the backend API endpoint.
+- **Azure Choice:** **Azure Static Web App (SWA)**
+- **Status:** **Implemented and Deployed via GitHub Actions.**
+- **Reasoning:** Optimized for modern frontend frameworks like Next.js. Provides a managed serverless backend for Server-Side Rendering (SSR) and API routes, while serving static assets from a global CDN. This decouples the frontend quota from the backend App Service Plan.
+- **Configuration:** Automatically builds and deploys to Azure on every push to the `main` branch.
 
 ### 2. Backend: .NET 8 (LTS) Minimal API
 - **Directory:** `music_streaming_service/music-streaming-minimal-api/`
@@ -47,8 +47,8 @@ This document maps the local development components of the Music Streaming Servi
 
 ### 5. Deployment & CI/CD
 - **Source Control:** GitHub
-- **Automation:** GitHub Actions pipelines (planned) for automated build and deployment of both the .NET backend and Next.js frontend to Azure App Services.
-- **Infrastructure as Code (IaC):** Terraform scripts to automatically provision and manage all Azure resources, including App Services, SQL Database, and Storage Accounts. (Azure Key Vault planned for future secret management).
+- **Automation:** **GitHub Actions pipelines** for automated build and deployment of both the .NET backend and Next.js frontend to Azure.
+- **Infrastructure as Code (IaC):** Terraform scripts provision and manage all Azure resources, including App Services, SQL Database, and Storage Accounts.
 - **Terraform Execution Policy:** Before executing any Terraform commands that modify infrastructure (e.g., `terraform apply`), Gemini CLI MUST show the `terraform plan` output and explicitly request user approval.
   - **Plan Archival:** Every plan must be saved in three distinct formats (all using the `.tfplan` extension).
   - No infrastructure changes should be applied without this confirmation.

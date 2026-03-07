@@ -5,6 +5,10 @@ resource "azurerm_resource_group" "rg" {
 }
 
 resource "random_id" "id" {
+  keepers = {
+    # Increment this value to force a resource reset (and fresh quota)
+    reset_trigger = "2"
+  }
   byte_length = 4
 }
 
@@ -85,21 +89,15 @@ resource "azurerm_linux_web_app" "backend" {
   tags = var.tags
 }
 
-resource "azurerm_linux_web_app" "frontend" {
-  name                = "app-web-music-${random_id.id.hex}"
+resource "azurerm_static_web_app" "frontend" {
+  name                = "stapp-music-${random_id.id.hex}"
   resource_group_name = azurerm_resource_group.rg.name
-  location            = azurerm_resource_group.rg.location
-  service_plan_id     = azurerm_service_plan.asp.id
-
-  site_config {
-    application_stack {
-      node_version = "20-lts" # Suitable for Next.js (React 19)
-    }
-    always_on = false
-  }
+  location            = "West Europe" # SWA is available in West Europe
+  sku_tier            = "Free"
+  sku_size            = "Free"
 
   app_settings = {
-    "NEXT_PUBLIC_ENV_URL" = "https://${azurerm_linux_web_app.backend.default_hostname}"
+    "BACKEND_API_URL" = "https://${azurerm_linux_web_app.backend.default_hostname}"
   }
 
   tags = var.tags
