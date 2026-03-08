@@ -108,6 +108,21 @@ If you prefer to define credentials explicitly in your configuration, use the va
 
 > **Warning:** Never commit your `terraform.tfvars` file to source control as it contains sensitive credentials.
 
+## Advanced Deployment Scenarios
+
+### 1. Two-Step Deployment (Event Grid Handshake)
+Azure Event Grid performs a **Handshake Validation** when creating a subscription to an Azure Function. This means the specific function (e.g., `SongUploadBroker`) **must already exist** in the cloud before the subscription can be created.
+
+To handle this gracefully in Terraform:
+1.  **First Run (Infra Only):** Ensure `enable_event_grid_subscription` is set to `false` (the default) in `variables.tf`. Run `terraform apply`. This provisions the empty Function App.
+2.  **Second Run (Code Deploy):** Deploy your Function App code (Phase 5).
+3.  **Third Run (Connect):** Update `enable_event_grid_subscription` to `true` and run `terraform apply` again. This "links" the Storage Account to your live Function.
+
+### 2. Webspace Pinning (Resource Group Conflict)
+In some regions (like West Europe), Azure "pins" a Resource Group to a specific hardware cluster based on the first Linux App Service created within it. 
+- **The Quirk:** An older cluster used for a Free (F1) App Service may not support the modern Linux Consumption (Y1) plan required for Functions.
+- **The Fix:** The Function App is provisioned in its own separate resource group (e.g., `rg-music-streaming-poc-func`) to allow Azure to pick a compatible hardware cluster.
+
 ## Basic Workflow
 
 1.  **Initialize:** `terraform init` (Downloads the Azure provider).

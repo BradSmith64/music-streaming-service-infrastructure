@@ -50,11 +50,37 @@ variable "azure_tenant_id" {
   default     = null
 }
 
+variable "github_token" {
+  description = "GitHub Personal Access Token"
+  type        = string
+  sensitive   = true
+  default     = null
+}
+
+variable "github_backend_repo" {
+  description = "Name of the backend GitHub repository"
+  type        = string
+  default     = "music-streaming-service"
+}
+
+variable "github_frontend_repo" {
+  description = "Name of the frontend GitHub repository"
+  type        = string
+  default     = "music-streaming-service-frontend"
+}
+
 variable "tags" {
   description = "Tags to apply to resources"
   type        = map(string)
   default     = {
     Environment = "POC"
     Project     = "MusicStreaming"
+    Owner       = "Brad"
   }
+}
+
+variable "enable_event_grid_subscription" {
+  description = "Set to true only AFTER the Function App code has been deployed (to allow for handshake validation)."
+  type        = bool
+  default     = false
 }

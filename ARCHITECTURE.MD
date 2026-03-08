@@ -10,11 +10,29 @@ This document maps the local development components of the Music Streaming Servi
 | **Backend API** | .NET 8 (LTS) | **Azure App Service** (Linux) | **Free (F1)** |
 | **Database** | SQL Server (Azure SQL Edge) | **Azure SQL Database** | **Free offer** |
 | **Blob Storage** | Azure Blob Storage | **Azure Storage Account** | **Standard LRS** |
-| **Secrets/Config** | `.env` / `appsettings.json` | **App Service Configuration** | **Standard** |
+| Secret Storage | `appsettings.json` / `.env` | **App Service Configuration** | Standard |
 
 ---
 
+## Resource Group Strategy
+
+The infrastructure is split into two Resource Groups to manage hardware placement constraints (Webspace Pinning) and ensure cost-optimization across different Linux SKUs:
+
+1.  **`rg-music-streaming-poc` (Primary):**
+    *   **Backend API** (Linux F1 Free)
+    *   **Frontend SWA** (Free)
+    *   **SQL Database** (Serverless Free Offer)
+    *   **Storage Account** (Standard LRS)
+    *   **Service Bus** (Basic)
+2.  **`rg-music-streaming-poc-func` (Compute):**
+    *   **Function App** (Linux Y1 Consumption/Free)
+    *   **Application Insights**
+    *   **Log Analytics Workspace**
+
+> **Note:** This split is required in the **West Europe** region to allow the coexistence of the **F1 (Free) App Service** and the **Y1 (Consumption) Function App**, as they require different underlying hardware clusters.
+
 ## Detailed Mapping
+
 
 ### 1. Frontend: Next.js Application
 - **Directory:** `music_streaming_service_frontend/`
