@@ -54,7 +54,6 @@ variable "github_token" {
   description = "GitHub Personal Access Token"
   type        = string
   sensitive   = true
-  default     = null
 }
 
 variable "github_backend_repo" {

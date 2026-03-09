@@ -183,8 +183,9 @@ resource "azurerm_linux_function_app" "func" {
     "ServiceBus__ConnectionString"           = azurerm_servicebus_namespace.sb.default_primary_connection_string
     "SongStorage__AccountName"                = azurerm_storage_account.st.name
     "SongStorage__AccountKey"                 = azurerm_storage_account.st.primary_access_key
-    "SongStorage__MusicContainer"             = azurerm_storage_container.music.name
+    "SongStorage__ContainerName"              = azurerm_storage_container.music.name
     "SongStorage__LandingZoneContainer"       = azurerm_storage_container.landing_zone.name
+    "SongStorage__ExpiryMinutes"              = "60"
     "AzureWebJobsStorage"                     = azurerm_storage_account.st.primary_connection_string
   }
 
@@ -233,6 +234,12 @@ resource "github_actions_secret" "backend_app_name" {
   repository      = var.github_backend_repo
   secret_name     = "AZURE_WEBAPP_NAME"
   plaintext_value = azurerm_linux_web_app.backend.name
+}
+
+resource "github_actions_secret" "function_app_name" {
+  repository      = var.github_backend_repo
+  secret_name     = "AZURE_FUNCTIONAPP_NAME"
+  plaintext_value = azurerm_linux_function_app.func.name
 }
 
 resource "github_actions_secret" "backend_client_id" {
